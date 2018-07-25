@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+
+\title{Little Book of Rotations}
+\author{Patrick Varin}
+
+\begin{document}
+\maketitle
+\section{Intro}
+This handbook on rotations is inspired partially by the Matrix Cookbook\cite{petersen2008matrix}.
+\section{Some Operations}
+\begin{align}
+	[v\times] &=
+	\begin{bmatrix}
+          0 & -v_3 &  v_2\\
+        v_3 &    0 & -v_1\\
+       -v_2 &  v_1 &    0\\
+	\end{bmatrix}\\
+	v\times w &=
+	\begin{bmatrix}
+          0 & -v_3 &  v_2\\
+        v_3 &    0 & -v_1\\
+       -v_2 &  v_1 &    0\\
+	\end{bmatrix}
+	\begin{bmatrix}
+		w_1\\
+		w_2\\
+		w_3
+	\end{bmatrix}\\
+	\frac{\partial}{\partial w}(v\times w) &= [v\times]\\
+	\frac{\partial}{\partial v}(v\times w) &= [w\times]^T = -[w\times]
+\end{align}
+\section{Quaternions}
+\subsection{Basics}
+\begin{align}
+	% Notation
+	q &=
+	\begin{bmatrix}
+			q_w\\
+			q_x\\
+			q_y\\
+			q_z
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	q_0\\
+	\vec q
+	\end{bmatrix}\\
+	% Conjugate
+ 	q^* &=
+	\begin{bmatrix}
+			q_w\\
+			-q_x\\
+			-q_y\\
+			-q_z
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		q_0\\
+		-\vec q
+	\end{bmatrix}\\
+ 	% Identity
+ 	q \circ q^* &=
+	\begin{bmatrix}
+		1\\
+		0\\
+		0\\
+		0\\
+	\end{bmatrix}\\
+ 	% Multiplication Operator
+ 	[q \circ] &=
+	\begin{bmatrix}
+		q_0, & -\vec q^T\\
+		\vec q & q_0I + [\vec q\times] 
+	\end{bmatrix}\\
+	&= q_0I +
+	\underbrace{\begin{bmatrix}
+	0 & -\vec q^T\\
+ 	\vec q & [\vec q \times]
+	\end{bmatrix}}_{\text{skew symmetric}}\\
+ 	% Multiplication
+	q \circ p &=
+	\begin{bmatrix}
+		q_wp_w - q_xp_x - q_yp_y - q_zp_z\\
+		q_wp_x + q_xp_w + q_yp_z - q_zp_y\\
+		q_wp_y - q_xp_z + q_yp_w + q_zp_x\\
+		q_wp_z + q_xp_y - q_yp_x + q_zp_w
+	\end{bmatrix}\\
+	&=
+	\begin{bmatrix}
+		q_0p_0 - \vec q \cdot \vec p\\
+		p_0\vec q + q_0 \vec p + \vec q \times \vec p\\
+	\end{bmatrix}
+\end{align}
+	
+\subsection{Derivatives}
+\begin{align}
+ 	% Multiplication Derivative 1
+	\frac{\partial}{\partial q}(q \circ p) &=
+	\begin{bmatrix}
+		p_0,    & \vec p^T\\
+		-\vec p, & p_0 I + [\vec p\times]^T
+ 	\end{bmatrix}\\
+ 	&= [p\circ]^T\\
+ 	% Multiplication Derivative 2
+	\frac{\partial}{\partial p}(q \circ p) &=
+	\begin{bmatrix}
+		q_0,    & -\vec q^T\\
+		\vec q, & q_0 I + [\vec q\times]
+ 	\end{bmatrix}\\
+ 	&= [q\circ]\\
+ 	% Rotation Derivative
+ 	\frac{\partial}{\partial p}(q \circ p \circ q^*) &= q \circ \frac{\partial}{\partial p}(p \circ q^*)\\
+ 	&= q \circ
+ 	\begin{bmatrix}
+		q_0,     & \vec q^T\\
+		-\vec q, & q_0 I - [q\times]
+ 	\end{bmatrix}\\
+ 	&=
+ 	\begin{bmatrix}
+		q_0, & -\vec q^T\\
+		\vec q, & q_0I + [\vec q\times] 
+	\end{bmatrix}
+	\begin{bmatrix}
+		q_0,     & \vec q^T\\
+		-\vec q, & q_0 I - [q\times]^T
+ 	\end{bmatrix}\\
+ 	&= q_0^2I -
+ 	\begin{bmatrix}
+ 		||\vec q||^2,& 0\\
+ 		0,& \vec q \vec q^T - [\vec q \times]^2
+ 	\end{bmatrix}
+\end{align}
+\bibliographystyle{ieeetr}
+\bibliography{references}
+\end{document}
